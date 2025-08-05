@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chore Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input[type="text"] {
+      width: 70%;
+      padding: 10px;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: white;
+      margin-top: 10px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      border-radius: 5px;
+    }
+
+    .done {
+      text-decoration: line-through;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Chore Tracker</h1>
+  <input type="text" id="choreInput" placeholder="Enter a chore">
+  <button onclick="addChore()">Add</button>
+
+  <ul id="choreList"></ul>
+
+  <script>
+    let chores = JSON.parse(localStorage.getItem("chores")) || [];
+
+    function saveChores() {
+      localStorage.setItem("chores", JSON.stringify(chores));
+    }
+
+    function renderChores() {
+      const list = document.getElementById("choreList");
+      list.innerHTML = "";
+      chores.forEach((chore, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span class="${chore.done ? 'done' : ''}" onclick="toggleDone(${index})">${chore.text}</span>
+          <button onclick="deleteChore(${index})">🗑️</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function addChore() {
+      const input = document.getElementById("choreInput");
+      const text = input.value.trim();
+      if (text !== "") {
+        chores.push({ text, done: false });
+        saveChores();
+        renderChores();
+        input.value = "";
+      }
+    }
+
+    function toggleDone(index) {
+      chores[index].done = !chores[index].done;
+      saveChores();
+      renderChores();
+    }
+
+    function deleteChore(index) {
+      chores.splice(index, 1);
+      saveChores();
+      renderChores();
+    }
+
+    // Load on page start
+    renderChores();
+  </script>
+</body>
+</html>
