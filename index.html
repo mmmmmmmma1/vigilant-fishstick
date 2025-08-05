@@ -2,113 +2,125 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Chore Chart</title>
+  <title>Kabes Family Chore Chart</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #ff06ea;
-      color: #333;
-      padding: 40px;
-      max-width: 500px;
-      margin: auto;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #667eea, #764ba2);
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
     }
 
     h1 {
+      margin-top: 40px;
+      font-size: 2.5em;
+      text-shadow: 2px 2px #00000040;
       text-align: center;
-      margin-bottom: 20px;
     }
 
-    .chore {
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 12px 20px;
-      margin: 10px 0;
-      border-radius: 8px;
+    .container {
+      background: #ffffff10;
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      margin-top: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      background: #ffffff20;
+      margin-bottom: 10px;
+      padding: 12px 16px;
+      border-radius: 10px;
       display: flex;
       justify-content: space-between;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      align-items: center;
+      transition: 0.3s ease;
     }
 
-    .chore.done {
+    li:hover {
+      background: #ffffff30;
+    }
+
+    .done {
       text-decoration: line-through;
-      color: #aaa;
-      background: #e6ffe6;
+      color: #ccc;
     }
 
-    .progress-container {
-      margin-top: 30px;
-    }
-
-    .progress-label {
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-
-    .progress-bar {
-      width: 100%;
-      background: #ddd;
-      height: 24px;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      width: 0%;
-      background: #4caf50;
-      text-align: center;
+    button {
+      background: none;
+      border: none;
       color: white;
-      line-height: 24px;
-      border-radius: 12px;
-      transition: width 0.3s;
+      font-size: 1.2em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      color: red;
+    }
+
+    span {
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <h1>Sam's Chore Chart</h1>
+  <h1>Kabe's Family Chore Chart</h1>
 
-  <div id="choreList"></div>
-
-  <div class="progress-container">
-    <div class="progress-label">Progress to 500 Robux Gift Card</div>
-    <div class="progress-bar">
-      <div class="progress-bar-fill" id="progressFill">0%</div>
-    </div>
+  <div class="container">
+    <ul id="choreList"></ul>
   </div>
 
   <script>
-    // ✅ You can still list your chores here
-    const chores = [
-      { task: "Ask about chores #1", done: true },
-      { task: "Ask about chores #2", done: false },
-      { task: "Ask about chores #3", done: false },
-      { task: "Ask about chores #4", done: false },
-      { task: "Ask about chores #5", done: false }
+    // 🧹 Manually set chores here:
+    let chores = [
+      { text: "Take out trash 10% or 1$", done: false },
+      { text: "Wash dishes every morning and night 15% or 1$", done: false },
+      { text: "blank", done: true },
+      { text: "let dogs out in the morning and feed and water them at night 30% or 2$", done: false },
+      { text: "clean living room 50% or 5$", done: false }
     ];
 
-    // ✅ Set progress manually here (change this number!)
-    const manualProgress = 60; // <--- CHANGE THIS to whatever percent you want
+    const list = document.getElementById("choreList");
 
-    const choreList = document.getElementById("choreList");
-    const progressFill = document.getElementById("progressFill");
+    function toggleDone(index) {
+      chores[index].done = !chores[index].done;
+      renderChores();
+    }
+
+    function deleteChore(index) {
+      chores.splice(index, 1);
+      renderChores();
+    }
 
     function renderChores() {
-      choreList.innerHTML = "";
-
-      chores.forEach((chore) => {
-        const div = document.createElement("div");
-        div.className = "chore" + (chore.done ? " done" : "");
-        div.textContent = chore.task;
-        choreList.appendChild(div);
+      list.innerHTML = "";
+      chores.forEach((chore, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span class="${chore.done ? 'done' : ''}" onclick="toggleDone(${index})">${chore.text}</span>
+          <button onclick="deleteChore(${index})">✖</button>
+        `;
+        list.appendChild(li);
       });
-
-      // Set progress bar manually
-      progressFill.style.width = manualProgress + "%";
-      progressFill.textContent = manualProgress + "%";
     }
 
     renderChores();
   </script>
+
 </body>
 </html>
