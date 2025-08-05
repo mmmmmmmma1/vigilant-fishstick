@@ -2,102 +2,112 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Chore Tracker</title>
+  <title>Chore Chart</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #ff06ea;
+      color: #333;
+      padding: 40px;
       max-width: 500px;
       margin: auto;
-      padding: 20px;
-      background: #f4f4f4;
     }
 
     h1 {
       text-align: center;
+      margin-bottom: 20px;
     }
 
-    input[type="text"] {
-      width: 70%;
-      padding: 10px;
-      margin-right: 10px;
-    }
-
-    button {
-      padding: 10px;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      background: white;
-      margin-top: 10px;
-      padding: 10px;
+    .chore {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 12px 20px;
+      margin: 10px 0;
+      border-radius: 8px;
       display: flex;
       justify-content: space-between;
-      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
-    .done {
+    .chore.done {
       text-decoration: line-through;
-      color: gray;
+      color: #aaa;
+      background: #e6ffe6;
+    }
+
+    .progress-container {
+      margin-top: 30px;
+    }
+
+    .progress-label {
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background: #ddd;
+      height: 24px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #4caf50;
+      text-align: center;
+      color: white;
+      line-height: 24px;
+      border-radius: 12px;
+      transition: width 0.3s;
     }
   </style>
 </head>
 <body>
 
-  <h1>Chore Tracker</h1>
-  <input type="text" id="choreInput" placeholder="Enter a chore">
-  <button onclick="addChore()">Add</button>
+  <h1>Sam's Chore Chart</h1>
 
-  <ul id="choreList"></ul>
+  <div id="choreList"></div>
+
+  <div class="progress-container">
+    <div class="progress-label">Progress to 500 Robux Gift Card</div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="progressFill">0%</div>
+    </div>
+  </div>
 
   <script>
-    let chores = JSON.parse(localStorage.getItem("chores")) || [];
+    // ✅ You can still list your chores here
+    const chores = [
+      { task: "Ask about chores #1", done: true },
+      { task: "Ask about chores #2", done: false },
+      { task: "Ask about chores #3", done: false },
+      { task: "Ask about chores #4", done: false },
+      { task: "Ask about chores #5", done: false }
+    ];
 
-    function saveChores() {
-      localStorage.setItem("chores", JSON.stringify(chores));
-    }
+    // ✅ Set progress manually here (change this number!)
+    const manualProgress = 60; // <--- CHANGE THIS to whatever percent you want
+
+    const choreList = document.getElementById("choreList");
+    const progressFill = document.getElementById("progressFill");
 
     function renderChores() {
-      const list = document.getElementById("choreList");
-      list.innerHTML = "";
-      chores.forEach((chore, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <span class="${chore.done ? 'done' : ''}" onclick="toggleDone(${index})">${chore.text}</span>
-          <button onclick="deleteChore(${index})">🗑️</button>
-        `;
-        list.appendChild(li);
+      choreList.innerHTML = "";
+
+      chores.forEach((chore) => {
+        const div = document.createElement("div");
+        div.className = "chore" + (chore.done ? " done" : "");
+        div.textContent = chore.task;
+        choreList.appendChild(div);
       });
+
+      // Set progress bar manually
+      progressFill.style.width = manualProgress + "%";
+      progressFill.textContent = manualProgress + "%";
     }
 
-    function addChore() {
-      const input = document.getElementById("choreInput");
-      const text = input.value.trim();
-      if (text !== "") {
-        chores.push({ text, done: false });
-        saveChores();
-        renderChores();
-        input.value = "";
-      }
-    }
-
-    function toggleDone(index) {
-      chores[index].done = !chores[index].done;
-      saveChores();
-      renderChores();
-    }
-
-    function deleteChore(index) {
-      chores.splice(index, 1);
-      saveChores();
-      renderChores();
-    }
-
-    // Load on page start
     renderChores();
   </script>
 </body>
